@@ -5,8 +5,9 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import {  CurrentUser } from './user.decorator';
-
+import { CurrentUser } from './user.decorator';
+import { Roles } from 'src/auth/roles.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -18,10 +19,10 @@ export class UsersResolver {
   }
 
   @Query(() => [User], { name: 'users' })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles( 'admin')
   findAll(@CurrentUser() user: User) {
-    /*  console.log(context); */
-    console.log("Current User IS",user);
+    console.log('Current User IS', user);
     return this.usersService.findAll();
   }
 }
