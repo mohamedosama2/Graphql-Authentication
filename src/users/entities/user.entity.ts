@@ -10,7 +10,7 @@ export class User {
   @Field({ nullable: true })
   id?: string;
 
-  @Prop({ type: String, required: true})
+  @Prop({ type: String, required: true })
   @Field()
   username: string;
 
@@ -21,12 +21,14 @@ export class User {
   @Prop({ type: String })
   @Field({ nullable: true })
   password?: string;
+
+  @Prop({ type: String, default: 'admin' })
+  role?: string;
 }
 export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.pre('save', async function () {
   const user = this;
-
 
   if ((this as UserDocument).password && this.isModified('password')) {
     // (this as UserDocument).password = await hash(
